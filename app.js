@@ -1,17 +1,15 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
-const multer = require("multer");
 require("dotenv").config();
-const Image = require("./imageModel");
+const multer = require('multer');
 
+const imageController = require("./controllers/imageController");
 const app = express();
 
 const port = process.env.PORT || 4000;
 
-mongoose.connect(
-  process.env.MONGO_URI,
+mongoose.connect(process.env.MONGO_URI,
   {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -25,6 +23,7 @@ mongoose.connect(
 app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
 
+// code related to multer and storing image in uploads folder
 const storage = multer.diskStorage({
   destination: "./public/uploads/",
   filename: (req, file, cb) => {
@@ -32,38 +31,11 @@ const storage = multer.diskStorage({
   },
 });
 
+// .single('image') is the field name of input type file tag from html file
 const upload = multer({ storage: storage }).single("image");
 
-const imgData = Image.find({});
-
-
-// display image
-app.get("/", (req, res) => {
-    imgData.exec((err, data) => {        
-      if (err) throw err;
-      res.render("index", { records: data });
-    });
-  });
-
-// post image
-app.post("/", upload, (req, res, next) => {
-    const name = req.body.name;
-    const desc = req.body.desc;
-    const img = req.file.filename;
-    
-    const imageDetails = new Image({
-        name: name,
-        desc: desc,
-        img: img 
-    });
-    
-    imageDetails.save((err, doc) => {
-        if(err) throw err;
-        imgData.exec((err, data) => {
-            res.render('index', { records: data });
-        });
-    });
-});
+app.get('/', imageController.display_blogs);
+app.post('/', upload, imageController.add_blogs);
 
 app.listen(port, (err) => {
   if (err) console.log(err);
