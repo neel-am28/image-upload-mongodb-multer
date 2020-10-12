@@ -28,10 +28,7 @@ app.set("view engine", "ejs");
 const storage = multer.diskStorage({
   destination: "./public/uploads/",
   filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -52,12 +49,12 @@ app.get("/", (req, res) => {
 app.post("/", upload, (req, res, next) => {
     const name = req.body.name;
     const desc = req.body.desc;
-    const imageFile = req.file.filename;
+    const img = req.file.filename;
     
     const imageDetails = new Image({
         name: name,
         desc: desc,
-        imagename: imageFile 
+        img: img 
     });
     
     imageDetails.save((err, doc) => {

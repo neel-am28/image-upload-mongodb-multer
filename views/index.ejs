@@ -35,9 +35,7 @@
             <div class="row">
                 <%if (records.length >0){ %>
                 <% records.forEach(function(row){ %>
-
-                <img src="./uploads/<%= row.img %>" alt="image" style="width:300px;height:250px;margin:5px auto;">
-
+                <img src="/uploads/<%=row.img %>" alt="image" style="width:300px;height:250px;margin:5px auto;">
                 <% }) }%>
             </div>
         </div>
