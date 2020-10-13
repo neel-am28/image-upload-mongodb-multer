@@ -35,8 +35,16 @@ const store = (req, res, next) => {
         phone: req.body.phone,
         age: req.body.age
     });
-    if(req.file){
-        employee.avatar = req.file.path
+    // if(req.file){
+    //     employee.avatar = req.file.path
+    // }
+    if(req.files){
+        let path = "";
+        req.files.forEach((files, index, arr) => {
+            path = path + files.path + ","
+        })
+        path = path.substring(0, path.lastIndexOf(','));
+        employee.avatar = path;
     }
     employee.save()
         .then((response) => {
