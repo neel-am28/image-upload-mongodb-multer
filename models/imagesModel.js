@@ -14,7 +14,10 @@ const imageSchema = mongoose.Schema({
     },
     age: {
         type: String
-    }    
+    },
+    avatar:{
+        type: String
+    }  
 }, { timestamps: true});
 
 module.exports = mongoose.model("multiple-image", imageSchema);

@@ -35,6 +35,9 @@ const store = (req, res, next) => {
         phone: req.body.phone,
         age: req.body.age
     });
+    if(req.file){
+        employee.avatar = req.file.path
+    }
     employee.save()
         .then((response) => {
             res.json({message: "Employee added successfully"});
